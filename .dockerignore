@@ -1,0 +1,12 @@
+.*
+!.env
+.gitignore
+Dockerfile
+docker-compose.yml
+README.md
+LICENSE
+deploy.yml
+ansible.cfg
+inventory
+deploy
+img

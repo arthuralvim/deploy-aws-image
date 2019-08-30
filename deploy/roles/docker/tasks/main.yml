@@ -1,0 +1,34 @@
+---
+
+- name: install-yum-packages
+  yum:
+    name: "{{ base_yum_packages }}"
+    update_cache: yes
+
+- name: install-python-packages
+  pip:
+    name: "{{ base_python_packages }}"
+
+- name: ensure-docker-is-started-and-enabled-at-boot
+  service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: ensure-docker-application-user-is-added-to-the-docker-group
+  user:
+    name: "{{ application_username }}"
+    groups: docker
+    append: true
+
+- name: install-docker-compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/{{ docker_compose_version }}/docker-compose-Linux-x86_64
+    dest: "/usr/local/bin/docker-compose"
+    mode: 0755
+
+- name: create-symbolic-link-for-docker-compose-binaries
+  file:
+    src: "/usr/local/bin/docker-compose"
+    dest: "/usr/bin/docker-compose"
+    state: link

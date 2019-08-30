@@ -1,0 +1,13 @@
+---
+
+- hosts:
+   - deploy
+  gather_facts: false
+  user: ec2-user
+  become: True
+  become_user: root
+  become_method: sudo
+  vars_files:
+    - deploy/vars/main.yml
+  roles:
+   - stop-and-remove

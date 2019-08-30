@@ -1,0 +1,35 @@
+---
+
+- name: ecr-login
+  shell: $(aws ecr get-login --no-include-email --region us-east-1)
+
+- name: creates-.environ-directory-for-root
+  file: path=/home/ec2-user/.environ/ state=directory
+
+- name: upload-enviroment-variables-file-to-target
+  copy: src="deploy/environ/{{ environ }}"
+        dest=/home/ec2-user/.environ/env
+
+- name: provision-staging-services
+  include_tasks: staging.yml
+  when: environ == "staging"
+
+- name: run-webserver-container
+  docker_container:
+    name: 'webserver'
+    recreate: true
+    restart_policy: unless-stopped
+    image: "{{ image_app_version }}"
+    published_ports:
+      - "8000:8000"
+    links:
+      - postgres_db
+      - elasticsearch
+    env_file: /home/ec2-user/.environ/env
+    log_driver: "awslogs"
+    log_options:
+      awslogs-region: "us-east-1"
+      awslogs-group: "tutorial-deploy-aws-image"
+      awslogs-stream: "webserver"
+      awslogs-create-group: "true"
+

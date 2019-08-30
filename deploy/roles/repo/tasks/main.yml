@@ -1,0 +1,21 @@
+---
+
+- name: creates-.ssh-directory-for-root
+  file: path=/home/ec2-user/.ssh/ state=directory
+
+- name: upload-deploy-keys-used-for-github-cloning
+  copy: src=deploy/github-deploy-keys/github-key.pem
+        dest=/home/ec2-user/.ssh/id_rsa
+
+- name: change-ssh-deploy-key-permissions
+  file: dest=/home/ec2-user/.ssh/id_rsa mode=0600
+
+- name: get-release-of-the-code
+  remote_user: "{{ application_username }}"
+  git: repo={{ repo }}
+       dest={{ application_code_path }}
+       version={{ version }}
+       accept_hostkey=yes
+       update=yes
+       force=yes
+       key_file="/home/ec2-user/.ssh/id_rsa"

@@ -1,0 +1,12 @@
+---
+
+- name: check-required-variables
+  fail: msg="Variable '{{ item }}' is not defined"
+  when: item not in vars
+  with_items: "{{required_vars}}"
+
+
+- name: fail-if-environment-is-wrong
+  fail:
+    msg: The environment must be "production" or "staging".
+  when: environ != "production" and environ != "staging"

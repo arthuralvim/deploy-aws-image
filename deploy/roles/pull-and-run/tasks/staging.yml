@@ -1,0 +1,20 @@
+---
+
+- name: running-staging-things
+  command: echo "staging"
+
+- name: run-postgres-container
+  docker_container:
+    name: "postgres_db"
+    image: "postgres:9.6.0"
+    state: started
+    restart_policy: always
+    published_ports:
+      - "5432:5432"
+
+- name: run-elasticsearch-container
+  docker_container:
+    name: "elasticsearch"
+    image: "docker.elastic.co/elasticsearch/elasticsearch:5.2.1"
+    published_ports:
+      - "9200:9200"

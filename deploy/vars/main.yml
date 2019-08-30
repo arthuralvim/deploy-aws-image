@@ -1,0 +1,13 @@
+application_username: ec2-user
+application_home: '/home/ec2-user/'
+application_code_path: '/home/ec2-user/code'
+docker_compose_version: '1.24.1'
+base_yum_packages:
+  - git
+  - docker
+base_python_packages:
+  - awscli
+  - docker-py
+required_vars:
+  - environ
+  - image_app_version

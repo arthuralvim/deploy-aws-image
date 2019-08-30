@@ -1,0 +1,19 @@
+version: '2'
+
+services:
+    webserver:
+        image: 120409133518.dkr.ecr.us-east-1.amazonaws.com/intelivix/tutorial-deploy-aws-image:887c83e
+        container_name: webserver
+        expose:
+            - "8000"
+        ports:
+            - "8000:8000"
+        environment:
+           SOME_ENV_VAR: example
+        logging:
+            driver: "awslogs"
+            options:
+                awslogs-region: "us-east-1"
+                awslogs-group: "tutorial-deploy-aws-image"
+                awslogs-stream: "webserver"
+                awslogs-create-group: "true"
